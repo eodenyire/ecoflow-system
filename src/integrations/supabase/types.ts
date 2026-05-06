@@ -14,16 +14,214 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      pickup_requests: {
+        Row: {
+          actual_weight_kg: number | null
+          address: string
+          citizen_id: string
+          collector_id: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_weight_kg: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          id: string
+          notes: string | null
+          proof_photo_url: string | null
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["pickup_status"]
+          updated_at: string
+          waste_type: Database["public"]["Enums"]["waste_type"]
+        }
+        Insert: {
+          actual_weight_kg?: number | null
+          address: string
+          citizen_id: string
+          collector_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          estimated_weight_kg?: number | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          id?: string
+          notes?: string | null
+          proof_photo_url?: string | null
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["pickup_status"]
+          updated_at?: string
+          waste_type?: Database["public"]["Enums"]["waste_type"]
+        }
+        Update: {
+          actual_weight_kg?: number | null
+          address?: string
+          citizen_id?: string
+          collector_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          estimated_weight_kg?: number | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          id?: string
+          notes?: string | null
+          proof_photo_url?: string | null
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["pickup_status"]
+          updated_at?: string
+          waste_type?: Database["public"]["Enums"]["waste_type"]
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rewards: {
+        Row: {
+          created_at: string
+          id: string
+          pickup_id: string | null
+          points: number
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pickup_id?: string | null
+          points?: number
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pickup_id?: string | null
+          points?: number
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rewards_pickup_id_fkey"
+            columns: ["pickup_id"]
+            isOneToOne: false
+            referencedRelation: "pickup_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      waste_items: {
+        Row: {
+          category: Database["public"]["Enums"]["waste_type"]
+          created_at: string
+          id: string
+          pickup_id: string
+          recyclable: boolean
+          weight_kg: number
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["waste_type"]
+          created_at?: string
+          id?: string
+          pickup_id: string
+          recyclable?: boolean
+          weight_kg?: number
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["waste_type"]
+          created_at?: string
+          id?: string
+          pickup_id?: string
+          recyclable?: boolean
+          weight_kg?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waste_items_pickup_id_fkey"
+            columns: ["pickup_id"]
+            isOneToOne: false
+            referencedRelation: "pickup_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "citizen" | "collector" | "admin"
+      pickup_status:
+        | "pending"
+        | "assigned"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      waste_type:
+        | "organic"
+        | "plastic"
+        | "metal"
+        | "glass"
+        | "paper"
+        | "mixed"
+        | "hazardous"
+        | "e_waste"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +348,25 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["citizen", "collector", "admin"],
+      pickup_status: [
+        "pending",
+        "assigned",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      waste_type: [
+        "organic",
+        "plastic",
+        "metal",
+        "glass",
+        "paper",
+        "mixed",
+        "hazardous",
+        "e_waste",
+      ],
+    },
   },
 } as const
