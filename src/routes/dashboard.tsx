@@ -204,7 +204,7 @@ function CollectorPanel({ userId }: { userId: string }) {
     load();
   }
   async function setStatus(id: string, status: Pickup["status"]) {
-    const patch: Record<string, unknown> = { status };
+    const patch: { status: Pickup["status"]; completed_at?: string } = { status };
     if (status === "completed") patch.completed_at = new Date().toISOString();
     const { error } = await supabase.from("pickup_requests").update(patch).eq("id", id);
     if (error) return toast.error(error.message);
@@ -248,15 +248,14 @@ function AdminPanel() {
   const [collectors, setCollectors] = useState<{ user_id: string; full_name: string | null }[]>([]);
 
   async function load() {
-    const [{ data: pickups }, { data: roleRows }] = await Promise.all([
-      supabase.from("pickup_requests").select("*").order("created_at", { ascending: false }).limit(200),
-      supabase.from("user_roles").select("user_id, profiles(full_name)").eq("role", "collector"),
-    ]);
+    const { data: pickups } = await supabase.from("pickup_requests").select("*").order("created_at", { ascending: false }).limit(200);
     setAll((pickups ?? []) as Pickup[]);
-    setCollectors(((roleRows ?? []) as Array<{ user_id: string; profiles: { full_name: string | null } | null }>).map((r) => ({
-      user_id: r.user_id,
-      full_name: r.profiles?.full_name ?? null,
-    })));
+
+    const { data: roleRows } = await supabase.from("user_roles").select("user_id").eq("role", "collector");
+    const ids = (roleRows ?? []).map((r) => r.user_id);
+    if (ids.length === 0) { setCollectors([]); return; }
+    const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", ids);
+    setCollectors((profs ?? []).map((p) => ({ user_id: p.id, full_name: p.full_name })));
   }
   useEffect(() => { load(); }, []);
 
