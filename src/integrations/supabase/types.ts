@@ -197,12 +197,125 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_pickup: {
+        Args: { p_collector_id: string; p_pickup_id: string }
+        Returns: {
+          actual_weight_kg: number | null
+          address: string
+          citizen_id: string
+          collector_id: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_weight_kg: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          id: string
+          notes: string | null
+          proof_photo_url: string | null
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["pickup_status"]
+          updated_at: string
+          waste_type: Database["public"]["Enums"]["waste_type"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "pickup_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      cancel_pickup: {
+        Args: { p_pickup_id: string }
+        Returns: {
+          actual_weight_kg: number | null
+          address: string
+          citizen_id: string
+          collector_id: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_weight_kg: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          id: string
+          notes: string | null
+          proof_photo_url: string | null
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["pickup_status"]
+          updated_at: string
+          waste_type: Database["public"]["Enums"]["waste_type"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "pickup_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      claim_pickup: {
+        Args: { p_pickup_id: string }
+        Returns: {
+          actual_weight_kg: number | null
+          address: string
+          citizen_id: string
+          collector_id: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_weight_kg: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          id: string
+          notes: string | null
+          proof_photo_url: string | null
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["pickup_status"]
+          updated_at: string
+          waste_type: Database["public"]["Enums"]["waste_type"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "pickup_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      update_assigned_pickup: {
+        Args: {
+          p_actual_weight_kg?: number
+          p_pickup_id: string
+          p_proof_photo_url?: string
+          p_status: Database["public"]["Enums"]["pickup_status"]
+        }
+        Returns: {
+          actual_weight_kg: number | null
+          address: string
+          citizen_id: string
+          collector_id: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_weight_kg: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          id: string
+          notes: string | null
+          proof_photo_url: string | null
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["pickup_status"]
+          updated_at: string
+          waste_type: Database["public"]["Enums"]["waste_type"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "pickup_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
